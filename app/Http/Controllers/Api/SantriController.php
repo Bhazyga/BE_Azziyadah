@@ -8,6 +8,7 @@ use App\Models\Santri;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class SantriController extends Controller
 {
@@ -56,7 +57,19 @@ class SantriController extends Controller
             'nama_sekolah_asal'          => 'required|string|max:255',
             'jenjang_pendidikan_terakhir'=> 'required|string|max:50',
             'alamat_sekolah_asal'        => 'required|string',
+            'foto_kk'                    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto_akte'                  => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
+
+        if ($request->hasFile('foto_kk')) {
+            $data['foto_kk'] = $request->file('foto_kk')
+                ->store('santri/kk', 'public');
+        }
+
+        if ($request->hasFile('foto_akte')) {
+            $data['foto_akte'] = $request->file('foto_akte')
+                ->store('santri/akte', 'public');
+        }
 
         $santri = Santri::create($data);
 
@@ -71,11 +84,11 @@ class SantriController extends Controller
     {
         return response()->json($santri, Response::HTTP_OK);
     }
-    public function biodata($id)
-    {
-        $santri = Santri::with(['santri', 'item'])->findOrFail($id);
-        return response()->json($santri);
-    }
+    // public function biodata($id)
+    // {
+    //     $santri = Santri::with(['santri', 'item'])->findOrFail($id);
+    //     return response()->json($santri);
+    // }
 
     /**
      * Perbarui data santri.
@@ -101,7 +114,23 @@ class SantriController extends Controller
             'nama_sekolah_asal'          => 'sometimes|required|string|max:255',
             'jenjang_pendidikan_terakhir'=> 'sometimes|required|string|max:50',
             'alamat_sekolah_asal'        => 'sometimes|required|string',
+            'foto_kk'                    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto_akte'                  => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
+
+        if ($request->hasFile('foto_kk')) {
+            if ($santri->foto_kk) {
+                Storage::disk('public')->delete($santri->foto_kk);
+            }
+
+            $data['foto_kk'] = $request->file('foto_kk')
+                ->store('santri/kk', 'public');
+        }
+
+        if ($request->hasFile('foto_akte')) {
+            $data['foto_akte'] = $request->file('foto_akte')
+                ->store('santri/akte', 'public');
+        }
 
         $santri->update($data);
 
@@ -122,7 +151,7 @@ class SantriController extends Controller
     public function getUnpaidItems($santriId)
     {
         $paidItemIds = Transaction::where('santri_id', $santriId)
-            ->where('status', 'sukses')
+            ->whereIn('status', ['settlement', 'capture'])
             ->pluck('item_id');
 
         $unpaidItems = Item::whereNotIn('id', $paidItemIds)

@@ -25,9 +25,20 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required|string|max:55',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
+            'password' => 'required|min:6|confirmed',
             'role' => 'santri',
 
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'email.unique' => 'Email sudah terdaftar, silakan gunakan email lain.',
+            'email.required' => 'Email wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
+            'name.required' => 'Nama wajib diisi.',
+            'password.confirmed' => 'Password konfirmasi tidak sama'
         ];
     }
 }

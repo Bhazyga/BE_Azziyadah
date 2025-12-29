@@ -13,8 +13,9 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         // 'http://localhost:8000/api/login'
-        "https://api.azziyadahklender.id/login",
-        "https://api.azziyadahklender.id/api/users",
-        "https://api.azziyadahklender.id/api/materials",
+        // "https://api.azziyadahklender.id/login",
+        // "https://api.azziyadahklender.id/api/users",
+        // "https://api.azziyadahklender.id/api/materials",
+        // "https://11dbed8dd942.ngrok-free.app/api/midtrans/notification",
     ];
 }

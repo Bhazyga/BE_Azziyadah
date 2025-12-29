@@ -14,6 +14,7 @@ class Santri extends Model
 
     // Kolom yang boleh diisi mass assignment (fillable)
     protected $fillable = [
+        'user_id',
         'nama_lengkap',
         'tempat_lahir',
         'tanggal_lahir',
@@ -31,13 +32,22 @@ class Santri extends Model
         'nama_sekolah_asal',
         'jenjang_pendidikan_terakhir',
         'alamat_sekolah_asal',
-        'grade_id'
+        'grade_id',
+        'status',
+        'foto_kk',
+        'foto_akte'
+
     ];
 
     // Relasi: Santri punya banyak transaksi
     public function transactions()
     {
         return $this->hasMany(Transaction::class, 'santri_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function grade()

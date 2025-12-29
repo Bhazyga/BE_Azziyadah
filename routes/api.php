@@ -35,26 +35,35 @@ use App\Http\Controllers\Api\DashboardController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/index', [AuthController::class,'index']); // (??) optional login?
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', fn(Request $request) => $request->user());
-    Route::post('/logout', [AuthController::class, 'logout']);
     Route::apiResource('/users', UserController::class);
+    Route::post('/logout', [AuthController::class, 'logout']);
+
     Route::get('/belum-aktif', [UserController::class, 'santriBelumAktif']); // List santri belum aktif
+    Route::post('/send-otp', [AuthController::class, 'sendOtp']);
+    Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
 });
 
 // ===============================
 // 🧕 SANTRI
 // ===============================
 Route::apiResource('/santris', SantriController::class);
-Route::get('/santris/{id}', [SantriController::class, 'biodata']);
+// Route::get('/santris/{id}', [SantriController::class, 'biodata']);
 Route::get('/santris/{id}/unpaid-items', [SantriController::class, 'getUnpaidItems']); // Unpaid by Santri ID
 Route::put('/activate-santri/{id}', [SantriActivationController::class, 'activate']);
 
 // ===============================
 // 💸 PAYMENT (Midtrans)
 // ===============================
-Route::post('/transactions/token', [PaymentController::class, 'getSnapToken']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/transactions/token', [PaymentController::class, 'getSnapToken']);
+});
+
 Route::post('/midtrans/notification', [PaymentController::class, 'handleNotification']); // Callback URL
 
 Route::middleware('auth:sanctum')->group(function () {

@@ -9,33 +9,41 @@ use Illuminate\Http\Request;
 
 class SantriActivationController extends Controller
 {
-    public function activate(Request $request, $id)
+    public function activate(Request $request, $userId)
     {
         $request->validate([
             'grade_id' => 'required|exists:grades,id',
         ]);
 
-        // 1. Cari santri
-        $santri = Santri::findOrFail($id);
+        $user = User::whereNull('santri_id')->findOrFail($userId);
 
-        // 2. Set grade_id (aktivasi kelas)
-        $santri->grade_id = $request->grade_id;
-        $santri->save();
+        $santri = Santri::create([
+            'nama_lengkap' => $user->name,
+            'tempat_lahir' => 'kosong',
+            'tanggal_lahir' => '2025-12-12',
+            'jenis_kelamin' => 'kosong',
+            'alamat_santri' => 'kosong',
+            'provinsi_santri' => 'kosong',
+            'kota_kabupaten_santri' => 'kosong',
+            'nama_ayah' => 'kosong',
+            'telepon_ayah' => 'kosong',
+            'nama_ibu' => 'kosong',
+            'telepon_ibu' => 'kosong',
+            'alamat_ortu' => 'kosong',
+            'nama_sekolah_asal' => 'kosong',
+            'jenjang_pendidikan_terakhir' => 'kosong',
+            'alamat_sekolah_asal' => 'kosong',
+            'email' => $user->email,
+            'grade_id' => $request->grade_id,
+            'status' => 'aktif',
+        ]);
 
-        // 3. Update user yang belum punya santri_id
-        $user = User::where('email', $santri->email)
-            ->whereNull('santri_id')
-            ->first();
-
-        if ($user) {
-            $user->santri_id = $santri->id;
-            $user->save();
-        }
+        $user->santri_id = $santri->id;
+        $user->save();
 
         return response()->json([
-            'message' => 'Santri berhasil diaktifkan.',
+            'message' => 'User berhasil diaktifkan menjadi santri',
             'santri' => $santri,
-            'user' => $user,
         ]);
     }
 }

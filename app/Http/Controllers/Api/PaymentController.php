@@ -107,10 +107,10 @@ class PaymentController extends Controller
                 ],
                 'callbacks' => [
                     // prod
-                    // 'finish' => 'https://www.azziyadahklender.id/user/payment-finish',
+                    'finish' => 'https://www.azziyadahklender.id/payment-finish',
 
-                    // local
-                    'finish' => 'http://localhost:3000/payment-finish',
+                    // // local
+                    // 'finish' => 'http://localhost:3000/payment-finish',
                 ],
             ];
 

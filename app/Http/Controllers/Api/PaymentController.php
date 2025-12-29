@@ -139,6 +139,10 @@ class PaymentController extends Controller
 
     public function handleNotification(Request $request)
     {
+        if (request('order_id') && str_contains(request('order_id'), 'payment_notif_test')) {
+            Log::info('📦 Received test notification from Midtrans Dashboard.', request()->all());
+            return response()->json(['message' => 'Test notification received'], 200);
+        }
         Log::info('Incoming Midtrans Notification Payload:', $request->all());
 
         // Setup Midtrans config lagi (jaga-jaga kalau belum di-boot)

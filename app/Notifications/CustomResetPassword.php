@@ -35,10 +35,12 @@ class CustomResetPassword extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Reset Password')
-            ->line('Klik tombol di bawah untuk reset password.')
-            ->action('Reset Password', $this->url)
-            ->line('Jika tidak merasa request, abaikan email ini.');
+        ->subject('Reset Password')
+        ->greeting('Assalamu’alaikum Wr. Wb.')
+        ->line('Kami menerima permintaan untuk mereset password akun Anda.')
+        ->action('Reset Password', $this->url)
+        ->line('Jika Anda tidak merasa melakukan permintaan ini, silakan abaikan email ini.')
+        ->salutation('Hormat kami, Pondok Pesantren Azziyadah Klender');
     }
 
 

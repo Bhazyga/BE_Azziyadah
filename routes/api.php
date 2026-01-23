@@ -15,7 +15,7 @@ use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\GradeController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\AdminSantriController;
-use App\Http\Controllers\api\BeritaController;
+use App\Http\Controllers\Api\BeritaController;
 use App\Http\Controllers\Api\KegiatanController;
 
 /*

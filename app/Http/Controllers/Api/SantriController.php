@@ -161,4 +161,24 @@ class SantriController extends Controller
         return response()->json($unpaidItems);
     }
 
+    public function byUser()
+    {
+        $user = auth()->user();
+
+        $santri = Santri::where('user_id', $user->id)->first();
+
+        if (!$santri) {
+            return response()->json([
+                'exists' => false,
+                'status' => null,
+            ]);
+        }
+
+        return response()->json([
+            'exists' => true,
+            'status' => $santri->status,
+            'santri_id' => $santri->id,
+        ]);
+    }
+
 }

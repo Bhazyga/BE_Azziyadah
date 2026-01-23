@@ -16,21 +16,9 @@ class ItemsTableSeeder extends Seeder
         DB::table('items')->insert([
             [
                 'kode_item' => 'ITM001',
-                'nama' => 'Item Pertama',
-                'harga' => 50000,
-                'deskripsi' => 'Deskripsi item pertama',
-            ],
-            [
-                'kode_item' => 'ITM002',
-                'nama' => 'Item Kedua',
-                'harga' => 75000,
-                'deskripsi' => 'Deskripsi item kedua',
-            ],
-            [
-                'kode_item' => 'ITM003',
-                'nama' => 'Item Ketiga',
-                'harga' => 100000,
-                'deskripsi' => 'Deskripsi item ketiga',
+                'nama' => 'Formulir Pendaftaran Santri',
+                'harga' => 310000,
+                'deskripsi' => 'Syarat Sebelum Pengisian Biodata Formulir Santri',
             ],
         ]);
     }

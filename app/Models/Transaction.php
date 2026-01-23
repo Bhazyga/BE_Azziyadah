@@ -9,12 +9,10 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    // Nama tabel (opsional, kalau sudah sesuai konvensi Laravel biasanya gak perlu)
     protected $table = 'transactions';
 
-    // Kolom yang boleh diisi massal
     protected $fillable = [
-        'santri_id',
+        'user_id',
         'item_id',
         'transaction_id',
         'midtrans_order_id',
@@ -27,22 +25,22 @@ class Transaction extends Model
         'payment_time',
     ];
 
-    // Casting tipe data khusus
     protected $casts = [
-        'midtrans_response' => 'array', // json jadi array otomatis
+        'midtrans_response' => 'array',
         'transaction_time' => 'datetime',
         'payment_time' => 'datetime',
     ];
 
-    // Relasi ke Santri (banyak transaksi dimiliki oleh satu santri)
-    public function santri()
+    // 🔥 RELASI KE USER (INI YANG DIPAKE)
+    public function user()
     {
-        return $this->belongsTo(Santri::class, 'santri_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relasi ke Item (banyak transaksi dimiliki oleh satu item)
+    // Relasi ke Item
     public function item()
     {
         return $this->belongsTo(Item::class, 'item_id');
     }
 }
+

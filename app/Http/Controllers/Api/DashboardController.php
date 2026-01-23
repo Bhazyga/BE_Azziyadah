@@ -17,14 +17,14 @@ class DashboardController extends Controller
 
             // Santri yang sudah diterima adalah yang sudah memiliki akun user
             'total_santri_diterima' => DB::table('users')
-                ->whereNotNull('santri_id')
-                ->distinct('santri_id')
+                // ->whereNotNull('santri_id')
+                // ->distinct('santri_id')
                 ->count(),
 
             // Santri mendaftar = santri yang belum punya akun user
             'total_pendaftar' => DB::table('santris')
                 ->whereNotIn('id', function ($query) {
-                    $query->select('santri_id')->from('users')->whereNotNull('santri_id');
+                    // $query->select('santri_id')->from('users')->whereNotNull('santri_id');
                 })
                 ->count(),
 

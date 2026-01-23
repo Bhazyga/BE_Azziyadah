@@ -11,7 +11,7 @@ class GradeSeeder extends Seeder
     {
         $jenjang = ['MI', 'MTS', 'MA'];
         $kelas = [1, 2, 3];
-        $huruf = ['A', 'B', 'C'];
+        $huruf = ['A', 'B', 'C', 'D', 'E'];
         $tahunAjaran = '2025/2026';
 
         foreach ($jenjang as $j) {

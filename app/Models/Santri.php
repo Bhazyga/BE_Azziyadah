@@ -39,11 +39,6 @@ class Santri extends Model
 
     ];
 
-    // Relasi: Santri punya banyak transaksi
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class, 'santri_id');
-    }
 
     public function user()
     {

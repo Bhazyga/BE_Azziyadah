@@ -14,6 +14,9 @@ use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\TeamController;
 use App\Http\Controllers\Api\GradeController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\AdminSantriController;
+use App\Http\Controllers\api\BeritaController;
+use App\Http\Controllers\Api\KegiatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,7 +58,11 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::apiResource('/santris', SantriController::class);
 // Route::get('/santris/{id}', [SantriController::class, 'biodata']);
 Route::get('/santris/{id}/unpaid-items', [SantriController::class, 'getUnpaidItems']); // Unpaid by Santri ID
-Route::put('/activate-santri/{id}', [SantriActivationController::class, 'activate']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('/activate-santri/{santri}', [SantriActivationController::class, 'activate']);
+});
+
 
 // ===============================
 // 💸 PAYMENT (Midtrans)
@@ -100,3 +107,35 @@ Route::prefix('grades')->group(function () {
     Route::put('{id}', [GradeController::class, 'update']);
     Route::delete('{id}', [GradeController::class, 'destroy']);
 });
+
+
+Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
+    Route::get('/santris', [AdminSantriController::class, 'index']);
+    Route::get('/santris/{santri}', [AdminSantriController::class, 'show']);
+    Route::put('/santris/{santri}', [AdminSantriController::class, 'update']);
+});
+
+Route::middleware('auth:sanctum')->get('/my-santri', [SantriController::class, 'byUser']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/kegiatan', [KegiatanController::class, 'index']);
+    Route::post('/admin/kegiatan', [KegiatanController::class, 'store']);
+    Route::get('/admin/kegiatan/{kegiatan}', [KegiatanController::class, 'show']);
+    Route::put('/admin/kegiatan/{kegiatan}', [KegiatanController::class, 'update']);
+    Route::delete('/admin/kegiatan/{kegiatan}', [KegiatanController::class, 'destroy']);
+});
+
+// public
+Route::get('/kegiatan', [KegiatanController::class, 'publicList']);
+
+Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+    Route::get('/berita', [BeritaController::class, 'index']);
+    Route::post('/berita', [BeritaController::class, 'store']);
+    Route::get('/berita/{id}', [BeritaController::class, 'showById']);   // 🔥 khusus admin by id
+    Route::put('/berita/{id}', [BeritaController::class, 'update']);
+    Route::delete('/berita/{id}', [BeritaController::class, 'destroy']);
+});
+
+Route::get('/berita', [BeritaController::class, 'publicIndex']);
+Route::get('/berita/slug/{slug}', [BeritaController::class, 'showBySlug']);  // 🔥 khusus slug

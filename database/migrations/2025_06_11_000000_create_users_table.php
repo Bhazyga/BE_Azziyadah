@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('role')->default('santri');
-            $table->unsignedBigInteger('santri_id')->nullable();
-            $table->foreign('santri_id')->references('id')->on('santris');
             $table->timestamps();
         });
     }

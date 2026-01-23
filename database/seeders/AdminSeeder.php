@@ -60,9 +60,5 @@ class AdminSeeder extends Seeder
             'status' => 0, // draft
         ]);
 
-        // 3️⃣ Update balik user -> santri_id
-        $user->update([
-            'santri_id' => $santri->id,
-        ]);
     }
 }

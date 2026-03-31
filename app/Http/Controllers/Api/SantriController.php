@@ -37,44 +37,44 @@ class SantriController extends Controller
      * Simpan santri baru.
      *  POST /api/santris
      */
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'nama_lengkap'               => 'required|string|max:255',
-            'tempat_lahir'               => 'required|string|max:100',
-            'tanggal_lahir'              => 'required|date',
-            'jenis_kelamin'              => 'required|string|max:20',
-            'alamat_santri'              => 'required|string',
-            'provinsi_santri'            => 'required|string|max:100',
-            'kota_kabupaten_santri'      => 'required|string|max:100',
-            'nama_ayah'                  => 'required|string|max:255',
-            'telepon_ayah'               => 'required|string|max:50',
-            'nama_ibu'                   => 'required|string|max:255',
-            'telepon_ibu'                => 'required|string|max:50',
-            'pekerjaan_ayah'             => 'nullable|string|max:100',
-            'pekerjaan_ibu'              => 'nullable|string|max:100',
-            'alamat_ortu'                => 'required|string',
-            'nama_sekolah_asal'          => 'required|string|max:255',
-            'jenjang_pendidikan_terakhir'=> 'required|string|max:50',
-            'alamat_sekolah_asal'        => 'required|string',
-            'foto_kk'                    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'foto_akte'                  => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $data = $request->validate([
+    //         'nama_lengkap'               => 'required|string|max:255',
+    //         'tempat_lahir'               => 'required|string|max:100',
+    //         'tanggal_lahir'              => 'required|date',
+    //         'jenis_kelamin'              => 'required|string|max:20',
+    //         'alamat_santri'              => 'required|string',
+    //         'provinsi_santri'            => 'required|string|max:100',
+    //         'kota_kabupaten_santri'      => 'required|string|max:100',
+    //         'nama_ayah'                  => 'required|string|max:255',
+    //         'telepon_ayah'               => 'required|string|max:50',
+    //         'nama_ibu'                   => 'required|string|max:255',
+    //         'telepon_ibu'                => 'required|string|max:50',
+    //         'pekerjaan_ayah'             => 'nullable|string|max:100',
+    //         'pekerjaan_ibu'              => 'nullable|string|max:100',
+    //         'alamat_ortu'                => 'required|string',
+    //         'nama_sekolah_asal'          => 'required|string|max:255',
+    //         'jenjang_pendidikan_terakhir'=> 'required|string|max:50',
+    //         'alamat_sekolah_asal'        => 'required|string',
+    //         'foto_kk'                    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    //         'foto_akte'                  => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+    //     ]);
 
-        if ($request->hasFile('foto_kk')) {
-            $data['foto_kk'] = $request->file('foto_kk')
-                ->store('santri/kk', 'public');
-        }
+    //     if ($request->hasFile('foto_kk')) {
+    //         $data['foto_kk'] = $request->file('foto_kk')
+    //             ->store('santri/kk', 'public');
+    //     }
 
-        if ($request->hasFile('foto_akte')) {
-            $data['foto_akte'] = $request->file('foto_akte')
-                ->store('santri/akte', 'public');
-        }
+    //     if ($request->hasFile('foto_akte')) {
+    //         $data['foto_akte'] = $request->file('foto_akte')
+    //             ->store('santri/akte', 'public');
+    //     }
 
-        $santri = Santri::create($data);
+    //     $santri = Santri::create($data);
 
-        return response()->json($santri, Response::HTTP_CREATED);
-    }
+    //     return response()->json($santri, Response::HTTP_CREATED);
+    // }
 
     /**
      * Tampilkan detail santri.
@@ -96,24 +96,29 @@ class SantriController extends Controller
      */
     public function update(Request $request, Santri $santri)
     {
+
+        if ($santri->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $data = $request->validate([
-            'nama_lengkap'               => 'sometimes|required|string|max:255',
-            'tempat_lahir'               => 'sometimes|required|string|max:100',
-            'tanggal_lahir'              => 'sometimes|required|date',
-            'jenis_kelamin'              => 'sometimes|required|string|max:20',
-            'alamat_santri'              => 'sometimes|required|string',
-            'provinsi_santri'            => 'sometimes|required|string|max:100',
-            'kota_kabupaten_santri'      => 'sometimes|required|string|max:100',
-            'nama_ayah'                  => 'sometimes|required|string|max:255',
-            'telepon_ayah'               => 'sometimes|required|string|max:50',
-            'nama_ibu'                   => 'sometimes|required|string|max:255',
-            'telepon_ibu'                => 'sometimes|required|string|max:50',
+            'nama_lengkap'               => 'required|string|max:255',
+            'tempat_lahir'               => 'required|string|max:100',
+            'tanggal_lahir'              => 'required|date',
+            'jenis_kelamin'              => 'required|string|max:20',
+            'alamat_santri'              => 'required|string',
+            'provinsi_santri'            => 'required|string|max:100',
+            'kota_kabupaten_santri'      => 'required|string|max:100',
+            'nama_ayah'                  => 'required|string|max:255',
+            'telepon_ayah'               => 'required|string|max:50',
+            'nama_ibu'                   => 'required|string|max:255',
+            'telepon_ibu'                => 'required|string|max:50',
             'pekerjaan_ayah'             => 'nullable|string|max:100',
             'pekerjaan_ibu'              => 'nullable|string|max:100',
-            'alamat_ortu'                => 'sometimes|required|string',
-            'nama_sekolah_asal'          => 'sometimes|required|string|max:255',
-            'jenjang_pendidikan_terakhir'=> 'sometimes|required|string|max:50',
-            'alamat_sekolah_asal'        => 'sometimes|required|string',
+            'alamat_ortu'                => 'required|string',
+            'nama_sekolah_asal'          => 'required|string|max:255',
+            'jenjang_pendidikan_terakhir'=> 'required|string|max:50',
+            'alamat_sekolah_asal'        => 'required|string',
             'foto_kk'                    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'foto_akte'                  => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
@@ -180,5 +185,19 @@ class SantriController extends Controller
             'santri_id' => $santri->id,
         ]);
     }
+
+    public function biodata()
+    {
+        $user = auth()->user();
+
+        $santri = Santri::where('user_id', $user->id)->first();
+
+        if (!$santri) {
+            return response()->json(null, 404);
+        }
+
+        return response()->json($santri);
+    }
+
 
 }

@@ -25,7 +25,13 @@ class KegiatanController extends Controller
             $query->where('jenjang', 'MA');
         }
 
-        return response()->json($query->latest()->get());
+        $query = Kegiatan::query();
+
+        if ($request->search) {
+            $query->where('judul', 'like', '%'.$request->search.'%');
+        }
+
+        return $query->latest()->paginate(10);
     }
 
     public function store(Request $request)

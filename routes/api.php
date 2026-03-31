@@ -17,6 +17,8 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\AdminSantriController;
 use App\Http\Controllers\Api\BeritaController;
 use App\Http\Controllers\Api\KegiatanController;
+use App\Http\Controllers\Api\GuruController;
+use App\Http\Controllers\Api\AlumniController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,13 +57,20 @@ Route::middleware('auth:sanctum')->group(function () {
 // ===============================
 // 🧕 SANTRI
 // ===============================
-Route::apiResource('/santris', SantriController::class);
-// Route::get('/santris/{id}', [SantriController::class, 'biodata']);
+// Route::apiResource('/santris', SantriController::class);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('/santris', SantriController::class);
+});
+
 Route::get('/santris/{id}/unpaid-items', [SantriController::class, 'getUnpaidItems']); // Unpaid by Santri ID
+Route::middleware('auth:sanctum')->get('/my-santri', [SantriController::class, 'byUser']);
+Route::middleware('auth:sanctum')->get('/biodatasantri', [SantriController::class, 'biodata']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/activate-santri/{santri}', [SantriActivationController::class, 'activate']);
 });
+
 
 
 // ===============================
@@ -115,7 +124,6 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     Route::put('/santris/{santri}', [AdminSantriController::class, 'update']);
 });
 
-Route::middleware('auth:sanctum')->get('/my-santri', [SantriController::class, 'byUser']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -135,7 +143,23 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::get('/berita/{id}', [BeritaController::class, 'showById']);   // 🔥 khusus admin by id
     Route::put('/berita/{id}', [BeritaController::class, 'update']);
     Route::delete('/berita/{id}', [BeritaController::class, 'destroy']);
+
+    Route::get('/guru', [GuruController::class, 'index']);
+    Route::post('/guru', [GuruController::class, 'store']);
+    Route::get('/guru/{id}', [GuruController::class, 'showById']);
+    Route::put('/guru/{id}', [GuruController::class, 'update']);
+    Route::delete('/guru/{id}', [GuruController::class, 'destroy']);
+
+    Route::get('/alumni', [AlumniController::class, 'index']);
+    Route::post('/alumni', [AlumniController::class, 'store']);
+    Route::get('/alumni/{id}', [AlumniController::class, 'show']);
+    Route::put('/alumni/{id}', [AlumniController::class, 'update']);
+    Route::delete('/alumni/{id}', [AlumniController::class, 'destroy']);
 });
+
+Route::get('/dataguru', [GuruController::class, 'publicIndex']);
+
+Route::get('/dataalumni', [AlumniController::class, 'publicIndex']);
 
 Route::get('/berita', [BeritaController::class, 'publicIndex']);
 Route::get('/berita/slug/{slug}', [BeritaController::class, 'showBySlug']);  // 🔥 khusus slug

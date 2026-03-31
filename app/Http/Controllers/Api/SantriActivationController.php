@@ -21,7 +21,7 @@ class SantriActivationController extends Controller
 
         $santri->update([
             'grade_id' => $request->grade_id,
-            'status'   => '2',
+            'status'   => 2,
         ]);
 
         return response()->json([

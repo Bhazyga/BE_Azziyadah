@@ -41,8 +41,18 @@ class BeritaController extends Controller
             'title' => 'required',
             'content' => 'required',
             'category' => 'required|in:MA,MTS,MI',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1000',
+        ], [
+            'title.required' => 'Judul wajib diisi.',
+            'content.required' => 'Konten wajib diisi.',
+            'category.required' => 'Kategori wajib dipilih.',
+            'category.in' => 'Kategori harus MA, MTS, atau MI.',
+
+            'image.image' => 'File harus berupa gambar.',
+            'image.mimes' => 'Format gambar harus jpg, jpeg, png, atau webp disarankan webp.',
+            'image.max' => 'Ukuran gambar maksimal 4MB.',
         ]);
+
 
         $slug = Str::slug($request->title);
 

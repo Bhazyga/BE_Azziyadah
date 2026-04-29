@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\BeritaController;
 use App\Http\Controllers\Api\KegiatanController;
 use App\Http\Controllers\Api\GuruController;
 use App\Http\Controllers\Api\AlumniController;
+use App\Http\Controllers\Api\TentangKamiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,6 +145,12 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::put('/berita/{id}', [BeritaController::class, 'update']);
     Route::delete('/berita/{id}', [BeritaController::class, 'destroy']);
 
+    Route::get('/tentangkami', [TentangKamiController::class, 'index']);
+    Route::post('/tentangkami', [TentangKamiController::class, 'store']);
+    Route::get('/tentangkami/{id}', [TentangKamiController::class, 'showById']);   // 🔥 khusus admin by id
+    Route::put('/tentangkami/{id}', [TentangKamiController::class, 'update']);
+    Route::delete('/tentangkami/{id}', [TentangKamiController::class, 'destroy']);
+
     Route::get('/guru', [GuruController::class, 'index']);
     Route::post('/guru', [GuruController::class, 'store']);
     Route::get('/guru/{id}', [GuruController::class, 'showById']);
@@ -161,5 +168,6 @@ Route::get('/dataguru', [GuruController::class, 'publicIndex']);
 
 Route::get('/dataalumni', [AlumniController::class, 'publicIndex']);
 
+Route::get('/tentangkami', [TentangKamiController::class, 'publicIndex']);
 Route::get('/berita', [BeritaController::class, 'publicIndex']);
 Route::get('/berita/slug/{slug}', [BeritaController::class, 'showBySlug']);  // 🔥 khusus slug

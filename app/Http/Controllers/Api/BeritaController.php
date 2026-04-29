@@ -41,7 +41,7 @@ class BeritaController extends Controller
             'title' => 'required',
             'content' => 'required',
             'category' => 'required|in:MA,MTS,MI',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4048',
         ]);
 
         $slug = Str::slug($request->title);

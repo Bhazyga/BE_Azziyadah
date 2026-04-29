@@ -14,7 +14,7 @@ class TentangKamiController extends Controller
     // ================= PUBLIC =================
     public function publicIndex()
     {
-        return TentangKami::orderBy('created_at', 'desc')
+        return TentangKami::orderBy('created_at', 'asc')
             ->get();
     }
 

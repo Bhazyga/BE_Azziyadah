@@ -119,8 +119,8 @@ class SantriController extends Controller
             'nama_sekolah_asal'          => 'required|string|max:255',
             'jenjang_pendidikan_terakhir'=> 'required|string|max:50',
             'alamat_sekolah_asal'        => 'required|string',
-            'foto_kk'                    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'foto_akte'                  => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'foto_kk'                    => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
+            'foto_akte'                  => 'nullable|image|mimes:jpg,jpeg,png|max:4096'
         ]);
 
         if ($request->hasFile('foto_kk')) {

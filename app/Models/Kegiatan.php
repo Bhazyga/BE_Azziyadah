@@ -12,9 +12,15 @@ class Kegiatan extends Model
 
     protected $fillable = [
         'judul',
+        'slug',
         'deskripsi',
         'gambar',
         'jenjang',
         'is_active',
     ];
+
+    public function images()
+    {
+        return $this->hasMany(KegiatanImage::class);
+    }
 }

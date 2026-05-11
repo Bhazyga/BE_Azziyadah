@@ -11,7 +11,6 @@ class AlumniController extends Controller
 {
 
     // ADMIN
-
     public function index(Request $request)
     {
         $query = Alumni::query();
@@ -44,13 +43,6 @@ class AlumniController extends Controller
         ]);
     }
 
-    // public function index()
-    // {
-    //     // return Alumni::orderBy('angkatan', 'desc')->get();
-    //     return Alumni::latest()->paginate(5);
-    // }
-
-
     // PUBLIC
     public function publicIndex()
     {
@@ -60,24 +52,67 @@ class AlumniController extends Controller
         return response()->json($alumni);
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
             'nama' => 'required|string|max:255',
             'angkatan' => 'required|string|max:20',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+            'tanggal_lahir' => 'nullable|date',
+
+            'nomor_wa' => [
+                'nullable',
+                'string',
+                'max:20',
+                'regex:/^[0-9+\-\s]+$/'
+            ],
+
+            'email' => 'nullable|email|max:255',
+
+            'alamat' => 'nullable|string|max:1000',
+
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+
+
+        ], [
+
+            'nama.max' => 'Nama maksimal 255 karakter.',
+            'angkatan.max' => 'Angkatan maksimal 20 karakter.',
+            'alamat.max' => 'Alamat maksimal 1000 karakter.',
+            'nomor_wa.max' => 'Nomor WA maksimal 20 karakter.',
+
+            // NOMOR WA
+            'nomor_wa.regex' => 'Format nomor WA tidak valid.',
+
+            // EMAIL
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email maksimal 255 karakter.',
+
+            'nomor_wa.regex' => 'Format nomor WA tidak valid.',
+            'email.email' => 'Format email tidak valid.',
+            'image.image' => 'File harus berupa gambar.',
+            'image.mimes' => 'Format gambar wajib jpg, jpeg, png, atau webp.',
+            'image.max' => 'Ukuran gambar maksimal 4MB.',
+            'image.uploaded' => 'Ukuran gambar maksimal 4MB.',
+            'image.uploaded' => 'Ukuran gambar maksimal 4MB.',
         ]);
 
         $imagePath = null;
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('alumni', 'public');
+            $imagePath = $request->file('image')
+                ->store('alumni', 'public');
         }
 
         $alumni = Alumni::create([
             'nama' => $request->nama,
             'angkatan' => $request->angkatan,
+
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'nomor_wa' => $request->nomor_wa,
+            'email' => $request->email,
+            'alamat' => $request->alamat,
+
             'image' => $imagePath,
         ]);
 
@@ -87,12 +122,10 @@ class AlumniController extends Controller
         ], 201);
     }
 
-
     public function show($id)
     {
         return Alumni::findOrFail($id);
     }
-
 
     public function update(Request $request, $id)
     {
@@ -101,21 +134,53 @@ class AlumniController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'angkatan' => 'required|string|max:20',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+            'tanggal_lahir' => 'nullable|date',
+
+            'nomor_wa' => [
+                'nullable',
+                'string',
+                'max:20',
+                'regex:/^[0-9+\-\s]+$/'
+            ],
+
+            'email' => 'nullable|email|max:255',
+
+            'alamat' => 'nullable|string|max:1000',
+
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+
+        ], [
+            'nomor_wa.regex' => 'Format nomor WA tidak valid.',
+            'email.email' => 'Format email tidak valid.',
+            'image.image' => 'File harus berupa gambar.',
+            'image.mimes' => 'Format gambar wajib jpg, jpeg, png, atau webp.',
+            'image.max' => 'Ukuran gambar maksimal 4MB.',
         ]);
 
         if ($request->hasFile('image')) {
 
-            if ($alumni->image && Storage::disk('public')->exists($alumni->image)) {
+            if (
+                $alumni->image &&
+                Storage::disk('public')->exists($alumni->image)
+            ) {
                 Storage::disk('public')->delete($alumni->image);
             }
 
-            $alumni->image = $request->file('image')->store('alumni', 'public');
+            $alumni->image = $request->file('image')
+                ->store('alumni', 'public');
         }
 
         $alumni->update([
             'nama' => $request->nama,
             'angkatan' => $request->angkatan,
+
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'nomor_wa' => $request->nomor_wa,
+            'email' => $request->email,
+            'alamat' => $request->alamat,
+
+            'image' => $alumni->image,
         ]);
 
         return response()->json([
@@ -124,12 +189,14 @@ class AlumniController extends Controller
         ]);
     }
 
-
     public function destroy($id)
     {
         $alumni = Alumni::findOrFail($id);
 
-        if ($alumni->image && Storage::disk('public')->exists($alumni->image)) {
+        if (
+            $alumni->image &&
+            Storage::disk('public')->exists($alumni->image)
+        ) {
             Storage::disk('public')->delete($alumni->image);
         }
 

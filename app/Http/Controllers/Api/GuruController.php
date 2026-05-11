@@ -39,7 +39,7 @@ class GuruController extends Controller
             'subject' => 'required|string|max:255',
             'experience' => 'required|string',
             'bio' => 'required|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
         ]);
 
         $slug = Str::slug($request->name);
@@ -85,7 +85,7 @@ class GuruController extends Controller
             'subject' => 'required',
             'experience' => 'required',
             'bio' => 'required',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:4096'
         ]);
 
         $slug = Str::slug($request->name);

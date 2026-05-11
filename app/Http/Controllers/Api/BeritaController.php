@@ -35,18 +35,21 @@ class BeritaController extends Controller
         if ($request->user()->role === 'adminMA') {
             $request->merge(['category' => 'MA']);
         }
+        if ($request->user()->role === 'admin') {
+            $request->merge(['category' => 'YAYASAN']);
+        }
 
 
         $request->validate([
             'title' => 'required',
             'content' => 'required',
             'category' => 'required|in:MA,MTS,MI',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1000',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
         ], [
             'title.required' => 'Judul wajib diisi.',
             'content.required' => 'Konten wajib diisi.',
             'category.required' => 'Kategori wajib dipilih.',
-            'category.in' => 'Kategori harus MA, MTS, atau MI.',
+            'category.in' => 'Kategori harus MA, MTS, MI atau YAYASAN.',
 
             'image.image' => 'File harus berupa gambar.',
             'image.mimes' => 'Format gambar harus jpg, jpeg, png, atau webp disarankan webp.',
@@ -103,6 +106,9 @@ class BeritaController extends Controller
         if ($request->user()->role === 'adminMA') {
             $request->merge(['category' => 'MA']);
         }
+        if ($request->user()->role === 'admin') {
+            $request->merge(['category' => 'YAYASAN']);
+        }
 
         $request->merge([
             'category' => strtoupper(trim($request->category))
@@ -111,8 +117,8 @@ class BeritaController extends Controller
         $request->validate([
             'title' => 'required',
             'content' => 'required',
-            'category' => 'required|in:MA,MTS,MI',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'category' => 'required|in:MA,MTS,MI,YAYASAN',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:4096',
         ]);
 
         $slug = Str::slug($request->title);

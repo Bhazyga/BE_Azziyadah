@@ -11,14 +11,12 @@ use Illuminate\Support\Facades\Storage;
 
 class TentangKamiController extends Controller
 {
-    // ================= PUBLIC =================
     public function publicIndex()
     {
         return TentangKami::orderBy('created_at', 'asc')
             ->get();
     }
 
-    // ================= ADMIN =================
     public function index()
     {
         return TentangKami::orderBy('created_at', 'desc')->get();
@@ -35,7 +33,6 @@ class TentangKamiController extends Controller
         if ($request->user()->role === 'adminMA') {
             $request->merge(['category' => 'MA']);
         }
-
 
         $request->validate([
             'title' => 'required',

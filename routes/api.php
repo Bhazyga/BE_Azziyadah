@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\BeritaController;
 use App\Http\Controllers\Api\KegiatanController;
 use App\Http\Controllers\Api\GuruController;
 use App\Http\Controllers\Api\AlumniController;
+use App\Http\Controllers\Api\GalleryController;
 use App\Http\Controllers\Api\TentangKamiController;
 
 /*
@@ -162,6 +163,12 @@ Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
     Route::get('/alumni/{id}', [AlumniController::class, 'show']);
     Route::put('/alumni/{id}', [AlumniController::class, 'update']);
     Route::delete('/alumni/{id}', [AlumniController::class, 'destroy']);
+
+    Route::get('/gallery', [GalleryController::class, 'index']);
+    Route::post('/gallery', [GalleryController::class, 'store']);
+    Route::get('/gallery/{id}', [GalleryController::class, 'show']);
+    Route::put('/gallery/{id}', [GalleryController::class, 'update']);
+    Route::delete('/gallery/{id}', [GalleryController::class, 'destroy']);
 });
 
 Route::get('/dataguru', [GuruController::class, 'publicIndex']);
@@ -170,4 +177,9 @@ Route::get('/dataalumni', [AlumniController::class, 'publicIndex']);
 
 Route::get('/tentangkami', [TentangKamiController::class, 'publicIndex']);
 Route::get('/berita', [BeritaController::class, 'publicIndex']);
-Route::get('/berita/slug/{slug}', [BeritaController::class, 'showBySlug']);  // 🔥 khusus slug
+
+Route::get('/berita/slug/{slug}', [BeritaController::class, 'showBySlug']);
+
+Route::get('/program/slug/{slug}', [KegiatanController::class, 'showBySlug']);
+
+Route::get('/gallery', [GalleryController::class, 'index']);
